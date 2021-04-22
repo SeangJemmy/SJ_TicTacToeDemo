@@ -2,13 +2,14 @@
 // unikey: jsea2356
 
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 
-char tttboard[3][3] = { '1', '2', '3', 
-                        '4', '5', '6', 
+char tttboard[3][3] = { '1', '2', '3',
+                        '4', '5', '6',
                         '7', '8', '9' };
-char cloneboard[3][3] = { ' ', ' ', ' ', 
-                        ' ', ' ', ' ', 
+char cloneboard[3][3] = { ' ', ' ', ' ',
+                        ' ', ' ', ' ',
                         ' ', ' ', ' ' };
 string player1, player2, the_player, binput, res;
 char ppl = 'x';
@@ -16,13 +17,13 @@ int int_binput, int_res, win = 0, count = 0;
 
 void welcome_msg()
 {
-    cout << " ~~ Tic Tac Toe (Demo 2) by Jemmy Seang ~~" << endl;
+    cout << " ~~ Tic Tac Toe (Demo 3) by Jemmy Seang ~~" << endl;
 
 	cout << "--> Player 1 Name: ";
 	getline(cin, player1); the_player = player1;
 	cout << "--> Player 2 Name: ";
 	getline(cin, player2);
-    
+
     cout << endl << " << Welcome " << player1 << "(x) and " << player2 << "(o) >>" << endl;
 }
 
@@ -52,7 +53,7 @@ void my_input()
     if(isdigit(binput[0]))
     {
         int_binput = stoi(binput);
-        if (int_binput < 1 or int_binput > 9) 
+        if (int_binput < 1 or int_binput > 9)
         {
             cout << " -->> Invalid input! Enter a number from 1-9: ";
             goto retry;
@@ -122,7 +123,7 @@ void drawtttboard()
 {
     int i = (int_binput-1) / 3 ;
     int j = (int_binput-1) % 3 ;
-    
+
     if (tttboard[i][j] == 'x' or tttboard[i][j] == 'o')
         {
             cout << "[" << the_player << " (" << ppl << ")] Board position is occupied! Try again!" << endl;
@@ -153,7 +154,7 @@ void restarting()
     if(isdigit(res[0]))
     {
         int_res = stoi(res);
-        if (int_res < 0 or int_res > 1) 
+        if (int_res < 0 or int_res > 1)
         {
             cout << "[System] Invalid input! Enter 0 or 1: ";
             goto retry2;
@@ -170,19 +171,41 @@ int main()
     restart:
     welcome_msg();
     pboard();
+    usleep(0.3*1000000);
     while (win != 1)
     {
         my_input();
+        usleep(0.2*1000000);
+        c8:        
         drawtttboard();
-        
-        
+
+
         if (win == 1)
         {
-            cout << "~~>> Player " << the_player << " (" << ppl << ") wins! <<~~" << endl << endl;
+            cout << "[System] ~~>> Player " << the_player << " (" << ppl << ") wins! <<~~" << endl << endl;
             break;
         }
-        if (count == 9) {
-            cout << " ~~>> DRAW <<~~" << endl << endl;
+
+        if (count == 8)
+        {
+          for (int i = 0; i < 3; i++)
+          {
+            for (int j = 0; j < 3; j++)
+            {
+              if (tttboard[i][j] == 'x' or tttboard[i][j] == 'o')
+              {} else {
+                int_binput = i*3 + (j + 1);
+                cout << "[" << the_player << " (" << ppl << ")] Auto Input: " << int_binput
+                << endl;
+                break;
+              }
+            }
+          }
+          goto c8;
+        }
+
+        if (count == 9) { 
+            cout << "[System] ~~>> DRAW <<~~" << endl << endl;
             break;
         }
     }
@@ -204,15 +227,15 @@ int main()
 
         system("cls");
         cout << "[System] Restarting..." << endl;
+        usleep(0.5*1000000);
 
         goto restart;
 
     } else {
 
-        cout << endl << " ~~>> BYEEEEEEEEEEEEEEEE <3 <<~~" << endl;
-        
-    }
+        cout << endl << "[System] ~~>> BYEEEEEEEEEEEEEEEE <3 <<~~" << endl;
 
+    }
     system("pause");
     return 0;
 }
