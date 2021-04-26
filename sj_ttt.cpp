@@ -7,15 +7,15 @@ using namespace std;
 
 char tttboard[3][3] = { '1', '2', '3',
                         '4', '5', '6',
-                        '7', '8', '9' };
+                        '7', '8', '9' }; // Original Board Array
 char cloneboard[3][3] = { ' ', ' ', ' ',
                         ' ', ' ', ' ',
-                        ' ', ' ', ' ' };
-string player1, player2, the_player, binput, res;
-char ppl = 'x';
-int int_binput, int_res, win = 0, count = 0;
+                        ' ', ' ', ' ' }; // A clone to original board to display empty board
+string player1, player2, the_player, binput, res; // player names, player's turn, board input and restart status 
+char ppl = 'x'; // initiate with x
+int int_binput, int_res, win = 0, count = 0; // board input and restart input as int, initiate win and count with 0
 
-void welcome_msg()
+void welcome_msg() // print out banners and ask player names
 {
     cout << " ~~ Tic Tac Toe (Demo 3) by Jemmy Seang ~~" << endl;
 
@@ -27,7 +27,7 @@ void welcome_msg()
     cout << endl << " << Welcome " << player1 << "(x) and " << player2 << "(o) >>" << endl;
 }
 
-void pboard()
+void pboard() // print board function
 {
     cout << endl;
     cout << "\t " << cloneboard[0][0] << " | " << cloneboard[0][1]  << " | " << cloneboard[0][2]  << endl;
@@ -38,12 +38,13 @@ void pboard()
     cout << endl;
 }
 
-void my_input()
+void my_input() // Prompt player for input on the board
 {
     cout << "[" << the_player << " (" << ppl << ")] Enter a number from 1-9: ";
     retry:
     getline(cin, binput);
 
+    // Check if the input is an integer from 1-9 or else try again
     if (binput.length() != 1)
     {
         cout << " -->> Invalid input! Enter a number from 1-9: ";
@@ -64,7 +65,7 @@ void my_input()
     }
 }
 
-void switch_ppl()
+void switch_ppl() // switch between x and o player
 {
     if (ppl == 'x') {
         ppl = 'o';
@@ -75,76 +76,77 @@ void switch_ppl()
     }
 }
 
-void status()
+void status() // Check win status
 {
-    if (tttboard[0][0] == tttboard[0][1] && tttboard[0][1] == tttboard[0][2])
+    if (tttboard[0][0] == tttboard[0][1] && tttboard[0][1] == tttboard[0][2]) // first row containing same x or o
     {
         win = 1;
     }
 
-    if (tttboard[1][0] == tttboard[1][1] && tttboard[1][1] == tttboard[1][2])
+    if (tttboard[1][0] == tttboard[1][1] && tttboard[1][1] == tttboard[1][2]) // second row containing same x or o
     {
         win = 1;
     }
 
-    if (tttboard[2][0] == tttboard[2][1] && tttboard[2][1] == tttboard[2][2])
+    if (tttboard[2][0] == tttboard[2][1] && tttboard[2][1] == tttboard[2][2]) // third row containing same x or o
     {
         win = 1;
     }
 
-    if (tttboard[0][0] == tttboard[1][0] && tttboard[1][0] == tttboard[2][0])
+    if (tttboard[0][0] == tttboard[1][0] && tttboard[1][0] == tttboard[2][0]) // first column containing same x or o
     {
         win = 1;
     }
 
-    if (tttboard[0][1] == tttboard[1][1] && tttboard[1][1] == tttboard[2][1])
+    if (tttboard[0][1] == tttboard[1][1] && tttboard[1][1] == tttboard[2][1]) // second column containing same x or o
     {
         win = 1;
     }
 
-    if (tttboard[0][2] == tttboard[1][2] && tttboard[1][2] == tttboard[2][2])
+    if (tttboard[0][2] == tttboard[1][2] && tttboard[1][2] == tttboard[2][2]) // third column containing same x or o
     {
         win = 1;
     }
 
-    if(tttboard[0][0] == tttboard[1][1] &&  tttboard[1][1] == tttboard[2][2])
+    if(tttboard[0][0] == tttboard[1][1] &&  tttboard[1][1] == tttboard[2][2]) // check diagonally top left to bottom right containing same x or o
     {
         win = 1;
     }
 
-    if(tttboard[0][2] == tttboard[1][1] && tttboard[1][1] == tttboard [2][0])
+    if(tttboard[0][2] == tttboard[1][1] && tttboard[1][1] == tttboard [2][0]) // check diagonally top right to bottom left containing same x or o
     {
         win = 1;
     }
 
 }
 
-void drawtttboard()
+void drawtttboard() // function that updates the board according to user input
 {
     int i = (int_binput-1) / 3 ;
     int j = (int_binput-1) % 3 ;
 
-    if (tttboard[i][j] == 'x' or tttboard[i][j] == 'o')
+    if (tttboard[i][j] == 'x' or tttboard[i][j] == 'o') // If the board already containing x or o
         {
             cout << "[" << the_player << " (" << ppl << ")] Board position is occupied! Try again!" << endl;
         } else {
-            tttboard[i][j] = ppl;
-            cloneboard[i][j] = ppl;
-            status();
-            if (win != 1) {
+            tttboard[i][j] = ppl; // update the board to x or o
+            cloneboard[i][j] = ppl; // clone the update
+            status(); // check status if win or not
+            if (win != 1) { // if not win, switch player
                 switch_ppl();
             }
-            count++;
-            pboard();
+            count++; // update the count (max is 9)
+            pboard(); // display the updated board
         }
 }
 
-void restarting()
+void restarting() // collect restarting input
 {
     cout << "[System] Do you want to restart the game? (Enter 0 or 1)" << endl << "[System] --> ";
     retry2:
     getline(cin, res);
 
+    // check for valid input 0 or 1
     if (res.length() != 1)
     {
         cout << "[System] Invalid input! Enter 0 or 1: ";
@@ -165,54 +167,58 @@ void restarting()
     }
 }
 
-int main()
+int main() // main program
 {
-    system("cls");
-    restart:
-    welcome_msg();
-    pboard();
-    usleep(0.3*1000000);
-    while (win != 1)
+    system("cls"); // clear terminal screen
+    restart: // a restart checkpoint
+    welcome_msg(); // print welcome banner
+    pboard(); // print the empty board
+    usleep(0.3*1000000); // pause system for 0.3 seconds (this is optional, I just wanna make it feels like the real game hehe)
+    while (win != 1) // run always if not yet win
     {
-        my_input();
-        usleep(0.2*1000000);
-        c8:        
-        drawtttboard();
+        my_input(); // get player's input
+        usleep(0.2*1000000); // pause system for 0.2 seconds
+        c8: // a checkpoint when the count is 8, perform auto input
+        drawtttboard(); // update board
 
 
-        if (win == 1)
+        if (win == 1) // if win 
         {
             cout << "[System] ~~>> Player " << the_player << " (" << ppl << ") wins! <<~~" << endl << endl;
-            break;
+            break; // stop the while loop for checking win status and prompt restart
         }
 
-        if (count == 8)
+        if (count == 8) // when board has 8 inputs aka count is 8
         {
           for (int i = 0; i < 3; i++)
           {
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 3; j++) // iterate each element of the board
             {
-              if (tttboard[i][j] == 'x' or tttboard[i][j] == 'o')
-              {} else {
+              if (tttboard[i][j] == 'x' or tttboard[i][j] == 'o') // if the board containg x or o, do nothing
+              {} else { 
+                // if not, fill it with x or o (this always x since we start with x)
+                // but the code still work if u switch the start with o and it will end with o
                 int_binput = i*3 + (j + 1);
                 cout << "[" << the_player << " (" << ppl << ")] Auto Input: " << int_binput
                 << endl;
-                break;
+                break; // stop the for loop
               }
             }
           }
-          goto c8;
+          goto c8; // go to c8 checkpoint to finish auto input
         }
 
-        if (count == 9) { 
+        if (count == 9) // if all the board are filled and no win is triggered
+        { 
             cout << "[System] ~~>> DRAW <<~~" << endl << endl;
-            break;
+            break; // stop the game with draw and prompt restart
         }
     }
 
-    restarting();
-    if (int_res == 1)
+    restarting(); // collect restart input
+    if (int_res == 1) // if it is 1
     {
+        // reset game elements to initial state without ending the program
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
@@ -231,7 +237,9 @@ int main()
 
         goto restart;
 
-    } else {
+    } else { 
+        
+        // if it is 0, stop the program with bye text
 
         cout << endl << "[System] ~~>> BYEEEEEEEEEEEEEEEE <3 <<~~" << endl;
 
